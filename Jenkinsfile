@@ -13,6 +13,7 @@ node {
         docker.withRegistry("http://${registry_url}", "dockerhub") {
             // Push your image now
             bat "docker push daresekulovski/kiii-jenkins:latest"
+            }
         }
     }
 }
