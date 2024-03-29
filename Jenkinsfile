@@ -7,13 +7,9 @@ node {
        app = docker.build("daresekulovski/kiii-jenkins")
     }
     stage('Push image') {
-    withCredentials([usernamePassword( credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
-        def registry_url = "registry.hub.docker.com/"
-        bat "docker login -u $USER -p $PASSWORD ${registry_url}"
-        docker.withRegistry("http://${registry_url}", "dockerhub") {
-            // Push your image now
-            bat "docker push daresekulovski/kiii-jenkins:latest"
-            }
+    withDockerRegistry([ credentialsId: "Docker-Hub-Cred", url: "https://index.docker.io/v1/" ]) {
+            app.push("${env.BRANCH_NAME}-${env.BUILD_NUMBER}")
+            app.push("${env.BRANCH_NAME}-latest")
         }
     }
 }
